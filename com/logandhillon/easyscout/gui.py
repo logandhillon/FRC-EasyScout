@@ -1,23 +1,34 @@
-from time import sleep
-import tkinter as tk
-from tkinter import filedialog, messagebox
-from PIL import Image, ImageTk
-from threading import Thread, Timer
 import platform
 import sys
-from colorama import Style
-import pyautogui
+import tkinter as tk
+from threading import Thread, Timer
+from time import sleep
+from tkinter import filedialog, messagebox
 from typing import List
+
+import pyautogui
+from colorama import Style
+from PIL import Image, ImageTk
 
 from com.logandhillon import easyscout
 from com.logandhillon.easyscout.beeper import tone
+from com.logandhillon.easyscout.debug import hid
 
-flagp = "--debug" in sys.argv
-def print_debug(s: str): print(f"{Style.DIM}[easyscout] [DEBUG] {s}{Style.RESET_ALL}")
+FLAG_DEBUG = "--debug" in sys.argv
+Thread(target=hid.print_keys_down).start()
+
+
+def print_debug(s: str):
+    if FLAG_DEBUG:
+        print(f"{Style.DIM}[{__file__[__file__.find('com'):]}] [DEBUG] {s}{Style.RESET_ALL}")
 
 
 isMac = platform.system() == "Darwin"
 print(f"[com.logandhillon.easyscout.gui] system has been detected as {'macOS' if isMac else 'other (likely Windows?)'}")
+
+if isMac:
+    print("macOS is NOTTT supported 😭 gg")
+    exit()
 
 
 def countdown():
@@ -37,11 +48,9 @@ def sim_type_codes_doc(results: List[List[str]]):
         for i, cell in enumerate(tsv):
             print_debug(f"printing cell {i}: {cell.encode()}")
             pyautogui.write(cell)
-            sleep(0.1)
-            pyautogui.press("enter" if i == max else "tab") 
+            pyautogui.press("enter" if i == max else "tab")
 
         print_debug("row complete, going next")
-        sleep(0.1)
         pyautogui.press("left", max+1)
 
 
@@ -75,7 +84,7 @@ def start_gui():
 
 
 if __name__ == "__main__":
-    if "--debug-hid" in sys.argv:
+    if "--test-hid" in sys.argv:
         for i in range(3):
             print(f"HID FUNC-TEST WILL START IN {3-i} SECONDS.")
             sleep(1)
