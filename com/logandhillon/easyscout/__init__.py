@@ -1,5 +1,6 @@
 import cv2
 import os
+from typing import Callable
 from colorama import Fore
 
 
@@ -33,20 +34,17 @@ def write_results(results: str, out):
     out.write(results)
 
 
-def run(root: str = 'samples') -> None:
+def scan_dir(callback: Callable[[str], None], target: str = 'samples') -> None:
     make_fresh_tsv()
 
-    print(f"{Fore.CYAN}> Preparing to scan '{root}/'{Fore.RESET}\n----")
+    print(f"{Fore.CYAN}> Preparing to scan '{target}/'{Fore.RESET}\n----")
 
-    out = open('out.tsv', 'a')
-
-    for file in os.listdir(root):
-        path = os.path.join(root, file)
+    for file in os.listdir(target):
+        path = os.path.join(target, file)
 
         results = scan_qr_code(path)
         scouter = results.split('\t')[0]
-        print(f"{Fore.YELLOW}[ OK ] Read scouting data from {scouter}{Fore.RESET}")
+        print(f"{Fore.YELLOW}[ OK ] Read scouting data from {Fore.MAGENTA}{scouter}{Fore.RESET}")
 
-        write_results(results, out)
-
-    print(f"\n{Fore.GREEN}Done! Output table is at 'out.tsv'{Fore.RESET}")
+    print("Scanning complete, returning to callback")
+    callback(results)

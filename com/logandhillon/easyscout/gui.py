@@ -2,11 +2,11 @@ import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 
-from com.logandhillon.easyscout import getResource, run
+from com.logandhillon.easyscout import getResource, scan_dir
 
 
 def on_image_click(_event):
-    run(filedialog.askdirectory())
+    scan_dir(filedialog.askdirectory())
 
 
 root = tk.Tk()
