@@ -42,8 +42,6 @@ def scan_dir(callback: Callable[[List[List[str]]], None], target: str = 'samples
         target (str?): directory to scan (default='samples')
     """
 
-    make_fresh_tsv()
-
     print(f"{Fore.CYAN}> Preparing to scan '{target}/'{Fore.RESET}\n----")
 
     data = []
