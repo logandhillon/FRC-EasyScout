@@ -12,10 +12,8 @@ from PIL import Image, ImageTk
 
 from com.logandhillon import easyscout
 from com.logandhillon.easyscout.beeper import tone
-from com.logandhillon.easyscout.debug import hid
 
 FLAG_DEBUG = "--debug" in sys.argv
-Thread(target=hid.print_keys_down).start()
 
 
 def print_debug(s: str):
@@ -27,8 +25,7 @@ isMac = platform.system() == "Darwin"
 print(f"[com.logandhillon.easyscout.gui] system has been detected as {'macOS' if isMac else 'other (likely Windows?)'}")
 
 if isMac:
-    print("macOS is NOTTT supported 😭 gg")
-    exit()
+    print("macOS may not work properly, program will continue anyway. Be careful!")
 
 
 def countdown():
@@ -46,10 +43,9 @@ def sim_type_codes_doc(results: List[str]):
 
         print_debug(f"printing cell {i}: {datastring.encode()}")
         pyautogui.write(datastring+'\n')
-        # pyautogui.press("return")
+        pyautogui.write("\n")
 
         print_debug("row complete, going next")
-        pyautogui.press("left", len(datastring.split("\t")))
 
 
 def handle_btn(results):
