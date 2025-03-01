@@ -38,17 +38,15 @@ def countdown():
     tone(1000, 0.5)
 
 
-def sim_type_codes_doc(results: List[List[str]]):
+def sim_type_codes_doc(results: List[str]):
     print("Starting com.logandhillon.easyscout.gui#sim_type_codes_doc")
 
-    for tsv in results:
-        max = len(tsv) - 1
-        print_debug(f"NEXT ROW! {max} items ready")
+    for datastring in results:
+        print_debug(f"NEXT ROW! {len(datastring)} bytes ready")
 
-        for i, cell in enumerate(tsv):
-            print_debug(f"printing cell {i}: {cell.encode()}")
-            pyautogui.write(cell)
-            pyautogui.press("enter" if i == max else "tab")
+        print_debug(f"printing cell {i}: {datastring.encode()}")
+        pyautogui.write(datastring)
+        pyautogui.press("enter")
 
         print_debug("row complete, going next")
         pyautogui.press("left", max+1)

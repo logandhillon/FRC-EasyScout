@@ -48,9 +48,10 @@ def scan_dir(callback: Callable[[List[List[str]]], None], target: str = 'samples
 
     for file in os.listdir(target):
         try:
-            qr_data = scan_qr_code(os.path.join(target, file)).split('\t')
+            qr_data = scan_qr_code(os.path.join(target, file))
+            scouter = qr_data.split('\t')[0]
             data.append(qr_data)
-            print(f"{Fore.YELLOW}[ OK ] Read scouting data from {Fore.MAGENTA}{qr_data[0]}{Fore.RESET}")
+            print(f"{Fore.YELLOW}[ OK ] Read scouting data from {Fore.MAGENTA}{scouter}{Fore.RESET}")
         except:
             print(f"{Fore.RED}[FAIL] Cannot read {file}! Skipping this file...{Fore.RESET}")
 
