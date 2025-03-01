@@ -1,6 +1,6 @@
 import cv2
 import os
-from typing import Callable
+from typing import Callable, List
 from colorama import Fore
 
 
@@ -34,11 +34,11 @@ def write_results(results: str, out):
     out.write(results)
 
 
-def scan_dir(callback: Callable[[str], None], target: str = 'samples') -> None:
+def scan_dir(callback: Callable[[List[List[str]]], None], target: str = 'samples') -> None:
     """Scans an optionally given directory for scouting codes, and parses them via the callback.
 
     Args:
-        callback ((str) -> void): callback for codes to be parsed via after scanning is complete
+        callback ((2d-str-array) -> void): callback for codes to be parsed via after scanning is complete
         target (str?): directory to scan (default='samples')
     """
 
@@ -50,10 +50,9 @@ def scan_dir(callback: Callable[[str], None], target: str = 'samples') -> None:
 
     for file in os.listdir(target):
         try:
-            qr_data = scan_qr_code(os.path.join(target, file))
+            qr_data = scan_qr_code(os.path.join(target, file)).split('\t')
             data.append(qr_data)
-            scouter = qr_data.split('\t')[0]
-            print(f"{Fore.YELLOW}[ OK ] Read scouting data from {Fore.MAGENTA}{scouter}{Fore.RESET}")
+            print(f"{Fore.YELLOW}[ OK ] Read scouting data from {Fore.MAGENTA}{qr_data[0]}{Fore.RESET}")
         except:
             print(f"{Fore.RED}[FAIL] Cannot read {file}! Skipping this file...{Fore.RESET}")
 
