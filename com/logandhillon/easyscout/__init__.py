@@ -46,7 +46,3 @@ def main() -> None:
         write_results(results, out)
 
     print(f"{Fore.GREEN}Done! Output table is at 'out.tsv'{Fore.RESET}")
-
-
-if __name__ == "__main__":
-    main()
