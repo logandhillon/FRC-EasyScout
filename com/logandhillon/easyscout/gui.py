@@ -45,8 +45,8 @@ def sim_type_codes_doc(results: List[str]):
         print_debug(f"NEXT ROW! {len(datastring)} bytes ready")
 
         print_debug(f"printing cell {i}: {datastring.encode()}")
-        pyautogui.write(datastring)
-        pyautogui.press("return")
+        pyautogui.write(datastring+'\n')
+        # pyautogui.press("return")
 
         print_debug("row complete, going next")
         pyautogui.press("left", len(datastring.split("\t")))
