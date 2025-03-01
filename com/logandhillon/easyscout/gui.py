@@ -41,7 +41,7 @@ def countdown():
 def sim_type_codes_doc(results: List[str]):
     print("Starting com.logandhillon.easyscout.gui#sim_type_codes_doc")
 
-    for datastring in results:
+    for i, datastring in enumerate(results):
         print_debug(f"NEXT ROW! {len(datastring)} bytes ready")
 
         print_debug(f"printing cell {i}: {datastring.encode()}")
