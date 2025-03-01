@@ -2,20 +2,26 @@ import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 
-from com.logandhillon.easyscout import getResource, scan_dir
+from com.logandhillon import easyscout
 
 
-def on_image_click(_event):
-    scan_dir(filedialog.askdirectory())
+def scan_typed(results):
+    with open('out.tsv', 'a') as out:
+        easyscout.write_results(results, out)
+
+
+def on_start_btn(_event):
+    easyscout.scan_dir(callback=scan_typed,
+                       target=filedialog.askdirectory())
 
 
 root = tk.Tk()
 root.title("FRC EasyScout - logandhillon.com")
 
 
-btn_img_main = ImageTk.PhotoImage(Image.open(getResource("1.png")).convert("RGBA"))
+btn_img_main = ImageTk.PhotoImage(Image.open(easyscout.getResource("1.png")).convert("RGBA"))
 start_btn = tk.Label(root, image=btn_img_main, bd=0)
-start_btn.bind("<Button-1>", on_image_click)
+start_btn.bind("<Button-1>", on_start_btn)
 
 # start_btn.place(x=250, y=150)
 tk.Label(root, text="click the button\nto scan :)", font=(None, 32, "bold")).pack(pady=32)
