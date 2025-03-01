@@ -4,31 +4,45 @@ from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
 from threading import Thread, Timer
 import platform
-
+import sys
+from colorama import Style
 import pyautogui
+from typing import List
 
 from com.logandhillon import easyscout
 from com.logandhillon.easyscout.beeper import tone
 
-ctrl = "command" if platform.system() == "Darwin" else "ctrl"
+flagp = "--debug" in sys.argv
+def print_debug(s: str): print(f"{Style.DIM}[easyscout] [DEBUG] {s}{Style.RESET_ALL}")
+
+
+isMac = platform.system() == "Darwin"
+print(f"[com.logandhillon.easyscout.gui] system has been detected as {'macOS' if isMac else 'other (likely Windows?)'}")
 
 
 def countdown():
-    for i in range(4):
+    for _ in range(4):
         tone(1500, 0.25)
         sleep(1)
     tone(1000, 0.5)
 
 
-def sim_type_codes_doc(results):
+def sim_type_codes_doc(results: List[List[str]]):
     print("Starting com.logandhillon.easyscout.gui#sim_type_codes_doc")
 
     for tsv in results:
-        for cell in tsv:
-            pyautogui.write(cell)
-            pyautogui.press('tab')
+        max = len(tsv) - 1
+        print_debug(f"NEXT ROW! {max} items ready")
 
-        pyautogui.press(["enter", "home"], interval=0.2)
+        for i, cell in enumerate(tsv):
+            print_debug(f"printing cell {i}: {cell.encode()}")
+            pyautogui.write(cell)
+            sleep(0.1)
+            pyautogui.press("enter" if i == max else "tab") 
+
+        print_debug("row complete, going next")
+        sleep(0.1)
+        pyautogui.press("left", max+1)
 
 
 def handle_btn(results):
@@ -57,5 +71,15 @@ tk.Label(root, text="(hint: press the button)").pack(pady=32)
 
 
 def start_gui():
-    print(f"Control key has been bound to '{ctrl}', exit the program if this is incorrect")
     root.mainloop()
+
+
+if __name__ == "__main__":
+    if "--debug-hid" in sys.argv:
+        for i in range(3):
+            print(f"HID FUNC-TEST WILL START IN {3-i} SECONDS.")
+            sleep(1)
+
+        sim_type_codes_doc([["cell", "cell 2"], ["cell", "cell 2"], ["cell", "cell 2"]])
+        print("test complete :)")
+        exit()
