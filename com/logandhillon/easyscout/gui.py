@@ -1,17 +1,28 @@
+from time import sleep
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
+from threading import Thread
 
 from com.logandhillon import easyscout
+from com.logandhillon.easyscout.beeper import tone
 
 
-def scan_typed(results):
-    with open('out.tsv', 'a') as out:
-        easyscout.write_results(results, out)
+def countdown():
+    for i in range(7):
+        tone(1500, 0.2)
+        sleep(1)
+    tone(1700, 0.2)
+
+
+def sim_type_codes_doc(results):
+    # please ignore this devious one-liner 😭
+    messagebox.showinfo("Heads up!", "EasyScout will now enter these values into your scouting datasheet.\n\nPlease click the first column of the first empty row and press OK.\n\nAfter pressing OK, EasyScout will begin in 8 seconds.")
+    Thread(target=countdown).start()
 
 
 def on_start_btn(_event):
-    easyscout.scan_dir(callback=scan_typed,
+    easyscout.scan_dir(callback=sim_type_codes_doc,
                        target=filedialog.askdirectory())
 
 
@@ -23,7 +34,6 @@ btn_img_main = ImageTk.PhotoImage(Image.open(easyscout.getResource("1.png")).con
 start_btn = tk.Label(root, image=btn_img_main, bd=0)
 start_btn.bind("<Button-1>", on_start_btn)
 
-# start_btn.place(x=250, y=150)
 tk.Label(root, text="click the button\nto scan :)", font=(None, 32, "bold")).pack(pady=32)
 start_btn.pack(padx=64)
 tk.Label(root, text="(hint: press the button)").pack(pady=32)
