@@ -3,6 +3,10 @@ import os
 from colorama import Fore
 
 
+def getResource(res):
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "res", res)
+
+
 def scan_qr_code(image_path):
     image = cv2.imread(image_path)
     qr_code_detector = cv2.QRCodeDetector()
@@ -15,13 +19,13 @@ def scan_qr_code(image_path):
 
 
 def make_fresh_tsv():
-    with open('res/base.tsv', 'r') as f:
+    with open(getResource("base.tsv"), 'r') as f:
         contents = f.read()
 
-    with open('out.tsv', 'w') as f:
+    with open(getResource("base.tsv"), 'w') as f:
         f.write(contents)
 
-    print("Created fresh copy of 'base.tsv'")
+    print("[ OK ] Created fresh copy of 'base.tsv'")
 
 
 def write_results(results: str, out):
@@ -29,20 +33,20 @@ def write_results(results: str, out):
     out.write(results)
 
 
-def main() -> None:
+def run(root: str = 'samples') -> None:
     make_fresh_tsv()
 
-    root = 'samples'
+    print(f"{Fore.CYAN}> Preparing to scan '{root}/'{Fore.RESET}\n----")
+
     out = open('out.tsv', 'a')
 
     for file in os.listdir(root):
         path = os.path.join(root, file)
-        print(f"Scanning '{path}'")
 
         results = scan_qr_code(path)
         scouter = results.split('\t')[0]
-        print(f"{Fore.YELLOW}Read scouting data from {scouter}{Fore.RESET}")
+        print(f"{Fore.YELLOW}[ OK ] Read scouting data from {scouter}{Fore.RESET}")
 
         write_results(results, out)
 
-    print(f"{Fore.GREEN}Done! Output table is at 'out.tsv'{Fore.RESET}")
+    print(f"\n{Fore.GREEN}Done! Output table is at 'out.tsv'{Fore.RESET}")
