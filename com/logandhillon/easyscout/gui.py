@@ -10,9 +10,9 @@ from com.logandhillon.easyscout.beeper import tone
 
 def countdown():
     for i in range(7):
-        tone(1500, 0.2)
+        tone(1500, 0.25)
         sleep(1)
-    tone(1700, 0.2)
+    tone(1000, 0.5)
 
 
 def sim_type_codes_doc(results):

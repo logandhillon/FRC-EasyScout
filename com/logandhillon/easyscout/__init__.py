@@ -46,13 +46,16 @@ def scan_dir(callback: Callable[[str], None], target: str = 'samples') -> None:
 
     print(f"{Fore.CYAN}> Preparing to scan '{target}/'{Fore.RESET}\n----")
 
+    data = []
+
     for file in os.listdir(target):
         try:
-            results = scan_qr_code(os.path.join(target, file))
-            scouter = results.split('\t')[0]
-            print(f"{Fore.YELLOW}[ OK ] Read scouting data from {Fore.MAGENTA}{scouter}{Fore.RESET} > sent to callback")
-            callback(results)
+            qr_data = scan_qr_code(os.path.join(target, file))
+            data.append(qr_data)
+            scouter = qr_data.split('\t')[0]
+            print(f"{Fore.YELLOW}[ OK ] Read scouting data from {Fore.MAGENTA}{scouter}{Fore.RESET}")
         except:
-            print(f"{Fore.RED}[FAIL] Cannot read {file}!{Fore.RESET}")
+            print(f"{Fore.RED}[FAIL] Cannot read {file}! Skipping this file...{Fore.RESET}")
 
-    print("DONE")
+    print("Sending compiled data to callback...")
+    callback(data)
