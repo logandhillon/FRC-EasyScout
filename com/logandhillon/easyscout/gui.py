@@ -46,10 +46,10 @@ def sim_type_codes_doc(results: List[str]):
 
         print_debug(f"printing cell {i}: {datastring.encode()}")
         pyautogui.write(datastring)
-        pyautogui.press("enter")
+        pyautogui.press("return")
 
         print_debug("row complete, going next")
-        pyautogui.press("left", max+1)
+        pyautogui.press("left", len(datastring.split("\t")))
 
 
 def handle_btn(results):
